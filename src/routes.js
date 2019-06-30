@@ -7,6 +7,18 @@ routes.get('/projects', (req, res) => {
   return res.json(projects)
 })
 
+function checkID (req, res, next) {
+  const { id } = req.params
+
+  const project = projects.find(project => project.id === id)
+
+  if (!project) {
+    return res.status(400).json({ message: 'Project does not exist' })
+  }
+
+  return next()
+}
+
 routes.post('/projects', (req, res) => {
   const { id, title } = req.body
 
@@ -16,7 +28,7 @@ routes.post('/projects', (req, res) => {
   return res.status(201).json(project)
 })
 
-routes.put('/project/:id', (req, res) => {
+routes.put('/project/:id', checkID, (req, res) => {
   const { id } = req.params
   const { title } = req.body
 
@@ -26,7 +38,7 @@ routes.put('/project/:id', (req, res) => {
   return res.json(project)
 })
 
-routes.delete('/project/:id', (req, res) => {
+routes.delete('/project/:id', checkID, (req, res) => {
   const { id } = req.params
 
   const projectIndex = projects.findIndex(project => project.id === id)
@@ -35,7 +47,7 @@ routes.delete('/project/:id', (req, res) => {
   return res.send()
 })
 
-routes.post('/project/:id/tasks', (req, res) => {
+routes.post('/project/:id/tasks', checkID, (req, res) => {
   const { id } = req.params
   const { title } = req.body
 
