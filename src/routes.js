@@ -23,7 +23,16 @@ routes.put('/project/:id', (req, res) => {
   const project = projects.find(project => project.id === id)
   project.title = title
 
-  return res.send(project)
+  return res.json(project)
+})
+
+routes.delete('/project/:id', (req, res) => {
+  const { id } = req.params
+
+  const projectIndex = projects.findIndex(project => project.id === id)
+  projects.splice(projectIndex, 1)
+
+  return res.send()
 })
 
 module.exports = routes
