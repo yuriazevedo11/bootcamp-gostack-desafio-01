@@ -10,9 +10,20 @@ routes.get('/projects', (req, res) => {
 routes.post('/projects', (req, res) => {
   const { id, title } = req.body
 
-  projects.push({ id, title, tasks: [] })
+  const project = { id, title, tasks: [] }
+  projects.push(project)
 
-  return res.status(201).json(projects)
+  return res.status(201).json(project)
+})
+
+routes.put('/project/:id', (req, res) => {
+  const { id } = req.params
+  const { title } = req.body
+
+  const project = projects.find(project => project.id === id)
+  project.title = title
+
+  return res.send(project)
 })
 
 module.exports = routes
