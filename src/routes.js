@@ -35,4 +35,14 @@ routes.delete('/project/:id', (req, res) => {
   return res.send()
 })
 
+routes.post('/project/:id/tasks', (req, res) => {
+  const { id } = req.params
+  const { title } = req.body
+
+  const project = projects.find(project => project.id === id)
+  project.tasks.push(title)
+
+  return res.json(project)
+})
+
 module.exports = routes
