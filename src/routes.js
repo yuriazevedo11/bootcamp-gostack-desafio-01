@@ -1,13 +1,10 @@
 const express = require('express')
 
 const routes = new express.Router()
+let requestCounter = 0
 const projects = []
 
-routes.get('/projects', (req, res) => {
-  return res.json(projects)
-})
-
-function checkID (req, res, next) {
+function checkID(req, res, next) {
   const { id } = req.params
 
   const project = projects.find(project => project.id === id)
@@ -18,6 +15,17 @@ function checkID (req, res, next) {
 
   return next()
 }
+
+routes.use((req, res, next) => {
+  requestCounter++
+  console.log(`Number of requests: ${requestCounter}`)
+
+  return next()
+})
+
+routes.get('/projects', (req, res) => {
+  return res.json(projects)
+})
 
 routes.post('/projects', (req, res) => {
   const { id, title } = req.body
